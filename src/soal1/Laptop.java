@@ -1,48 +1,58 @@
 package soal1;
 
 /**
- * Merepresentasikan perangkat bertipe Laptop yang mewarisi kelas Perangkat.
- * Memiliki spesifikasi tambahan berupa kapasitas RAM dan ukuran layar.
+ * Merepresentasikan laptop yang mewarisi data dasar dari Perangkat.
  */
 public class Laptop extends Perangkat {
-    private static final double PERSEN_PEMBAGI = 100.0;
-
     private int ramGb;
     private double ukuranLayarInci;
 
     /**
-     * Membuat objek Laptop baru.
+     * Membuat laptop dengan kapasitas RAM dan ukuran layar tertentu.
      *
      * @param merek merek laptop
      * @param harga harga laptop
      * @param garansiBulan lama garansi dalam bulan
-     * @param ramGb kapasitas RAM dalam GB
-     * @param ukuranLayarInci ukuran layar dalam inci
+     * @param ramGb kapasitas RAM dalam GB, harus lebih besar dari nol
+     * @param ukuranLayarInci ukuran layar dalam inci, harus lebih besar dari nol
+     * @throws IllegalArgumentException jika RAM atau ukuran layar tidak valid
      */
-    public Laptop(String merek, double harga, int garansiBulan, int ramGb, double ukuranLayarInci) {
+    public Laptop(String merek, double harga, int garansiBulan,
+                  int ramGb, double ukuranLayarInci) {
         super(merek, harga, garansiBulan);
+        if (ramGb <= 0) {
+            throw new IllegalArgumentException("RAM harus lebih besar dari nol.");
+        }
+        if (ukuranLayarInci <= 0) {
+            throw new IllegalArgumentException("Ukuran layar harus lebih besar dari nol.");
+        }
         this.ramGb = ramGb;
         this.ukuranLayarInci = ukuranLayarInci;
     }
 
     /**
-     * Menghitung harga laptop setelah dikurangi diskon promo.
-     * Mengakses atribut protected harga dari superclass secara langsung.
+     * Menghitung harga laptop setelah diskon dengan mengakses harga protected.
      *
-     * @param diskonPersen persentase diskon promo
-     * @return harga setelah diskon
+     * @param diskonPersen persentase diskon dari 0 sampai 100
+     * @return harga laptop setelah diskon
+     * @throws IllegalArgumentException jika persentase diskon di luar rentang 0 sampai 100
      */
     public double hitungHargaPromo(double diskonPersen) {
-        return harga - (harga * diskonPersen / PERSEN_PEMBAGI);
+        if (diskonPersen < 0 || diskonPersen > 100) {
+            throw new IllegalArgumentException("Diskon harus berada pada rentang 0 sampai 100 persen.");
+        }
+        return harga * (1.0 - diskonPersen / 100.0);
     }
 
     /**
-     * Menghasilkan informasi singkat laptop beserta spesifikasi RAM dan layar.
+     * Menambahkan informasi RAM dan layar pada informasi dasar perangkat.
      *
-     * @return teks informasi singkat laptop
+     * @return informasi singkat laptop
      */
     @Override
     public String infoSingkat() {
-        return super.infoSingkat() + " | RAM " + ramGb + " GB | layar " + ukuranLayarInci + " inci";
+        return super.infoSingkat()
+                + " | RAM " + ramGb + " GB"
+                + " | layar " + ukuranLayarInci + " inci";
     }
 }

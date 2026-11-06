@@ -1,23 +1,24 @@
 package soal1;
 
 /**
- * Merepresentasikan perangkat elektronik dasar yang dijual di toko.
- * Menyimpan data merek, harga, dan masa garansi perangkat.
+ * Merepresentasikan perangkat elektronik dengan data dasar merek, harga, dan garansi.
+ * Kelas ini menjadi superclass bagi jenis perangkat yang lebih spesifik.
  */
 public class Perangkat {
-    private static final double TARIF_PAJAK = 0.10;
+    /** Tarif pajak perangkat sebesar 10 persen. */
+    protected static final double TARIF_PAJAK = 0.10;
 
     private String merek;
     protected double harga;
     private int garansiBulan;
 
     /**
-     * Membuat objek Perangkat baru dengan validasi merek dan harga.
+     * Membuat perangkat elektronik setelah memvalidasi data dasarnya.
      *
      * @param merek merek perangkat, tidak boleh kosong
      * @param harga harga perangkat, tidak boleh negatif
-     * @param garansiBulan lama garansi dalam bulan
-     * @throws IllegalArgumentException jika merek kosong atau harga negatif
+     * @param garansiBulan lama garansi dalam bulan, tidak boleh negatif
+     * @throws IllegalArgumentException jika merek kosong atau nilai numerik negatif
      */
     public Perangkat(String merek, double harga, int garansiBulan) {
         if (merek == null || merek.trim().isEmpty()) {
@@ -26,13 +27,16 @@ public class Perangkat {
         if (harga < 0) {
             throw new IllegalArgumentException("Harga tidak boleh negatif.");
         }
-        this.merek = merek;
+        if (garansiBulan < 0) {
+            throw new IllegalArgumentException("Garansi tidak boleh negatif.");
+        }
+        this.merek = merek.trim();
         this.harga = harga;
         this.garansiBulan = garansiBulan;
     }
 
     /**
-     * Mengambil nama merek perangkat.
+     * Mengembalikan merek perangkat.
      *
      * @return merek perangkat
      */
@@ -41,7 +45,7 @@ public class Perangkat {
     }
 
     /**
-     * Mengambil masa garansi perangkat dalam bulan.
+     * Mengembalikan lama garansi perangkat.
      *
      * @return lama garansi dalam bulan
      */
@@ -50,7 +54,7 @@ public class Perangkat {
     }
 
     /**
-     * Menghitung pajak perangkat sebesar 10 persen dari harga.
+     * Menghitung pajak berdasarkan harga dasar perangkat.
      *
      * @return nilai pajak perangkat
      */
@@ -59,9 +63,9 @@ public class Perangkat {
     }
 
     /**
-     * Menghasilkan informasi singkat mengenai merek dan garansi perangkat.
+     * Menghasilkan informasi singkat yang dapat diperluas oleh subclass.
      *
-     * @return teks informasi singkat perangkat
+     * @return merek dan lama garansi perangkat
      */
     public String infoSingkat() {
         return merek + " | garansi " + garansiBulan + " bulan";
